@@ -1,0 +1,20 @@
+<main>
+  <section class="country-table">
+    @defer (when countries$) { @for (country of countries$ | async; track
+    country.id) {
+    <div class="country-card">
+      <app-country-detail
+        [country]="country"
+        (countrySelected)="setSelectedCountry($event)"
+      ></app-country-detail>
+    </div>
+    }}@loading {
+    <h2>Loading</h2>
+    } @placeholder {
+    <h2>Placeholder</h2>
+    }
+  </section>
+  <section class="country-counter">
+    <app-country-counter [counter]="lastSelectedCountry" />
+  </section>
+</main>

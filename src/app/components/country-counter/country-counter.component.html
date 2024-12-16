@@ -1,0 +1,16 @@
+@if (counter) {
+<mat-card appearance="outlined" class="country-card sticky-top">
+  <mat-card-header>
+    <div mat-card-avatar class="example-header-image"></div>
+    <mat-card-title>Selected Card</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <p>
+      Code: <strong>{{ counter.countryCode.code }}</strong>
+    </p>
+    <p>
+      Clicked: <strong>{{ counter.clickedCounter }}</strong>
+    </p>
+  </mat-card-content>
+</mat-card>
+}

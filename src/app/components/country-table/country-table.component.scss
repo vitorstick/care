@@ -1,0 +1,23 @@
+main {
+  margin: 20px;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1rem;
+  padding: 1rem;
+
+  .country-table {
+    grid-column: 1;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+
+    .country-card {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .country-counter {
+    grid-column: 2;
+  }
+}

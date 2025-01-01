@@ -1,8 +1,9 @@
 import { AsyncPipe } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
+import { take, tap } from 'rxjs';
 import { ApiService } from '../../data/api.service';
+import { CountryStoreService } from '../../data/country.store';
 import { CountryCode } from '../../models/countryCode.interface';
-import { CountryCodeAndClickedCounter } from '../../models/countryCounter.type';
 import { CountryCounterComponent } from '../country-counter/country-counter.component';
 import { CountryDetailComponent } from '../country-detail/country-detail.component';
 
@@ -11,38 +12,28 @@ import { CountryDetailComponent } from '../country-detail/country-detail.compone
   imports: [CountryDetailComponent, CountryCounterComponent, AsyncPipe],
   templateUrl: './country-table.component.html',
   styleUrl: './country-table.component.scss',
-  providers: [ApiService],
+  providers: [ApiService, CountryStoreService],
 })
-export class CountryTableComponent {
-  private apiService = inject(ApiService);
-  private selectedCountries = new Map<number, CountryCodeAndClickedCounter>();
+export class CountryTableComponent implements OnInit {
+  private _apiService = inject(ApiService);
+  private _countryStoreService = inject(CountryStoreService);
 
-  countries$ = this.apiService.getCountries();
-  lastSelectedCountry: CountryCodeAndClickedCounter | null = null;
+  countryCounter$ = this._countryStoreService.getCountries();
+  lastSelectedCountry$ = this._countryStoreService.getLastSelectedCountry();
 
-  setSelectedCountry(country: CountryCode) {
-    const countryFromList = this.selectedCountries.get(country.id);
-
-    if (!countryFromList) {
-      this.lastSelectedCountry = {
-        countryCode: country,
-        clickedCounter: 1,
-      };
-      this.setLastSelectedCountry(country, this.lastSelectedCountry);
-    } else {
-      const clickedCounter = countryFromList.clickedCounter + 1;
-      this.lastSelectedCountry = {
-        countryCode: country,
-        clickedCounter,
-      };
-      this.setLastSelectedCountry(country, this.lastSelectedCountry);
-    }
+  ngOnInit(): void {
+    this._apiService
+      .getCountries()
+      .pipe(
+        take(1),
+        tap((countries) => {
+          this._countryStoreService.setCountries(countries);
+        })
+      )
+      .subscribe();
   }
 
-  private setLastSelectedCountry(
-    country: CountryCode,
-    selectedCountry: CountryCodeAndClickedCounter
-  ) {
-    this.selectedCountries.set(country.id, selectedCountry);
+  updateCounter(country: CountryCode) {
+    this._countryStoreService.updateCountry(country);
   }
 }

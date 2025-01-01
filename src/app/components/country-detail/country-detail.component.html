@@ -3,6 +3,11 @@
     <div mat-card-avatar class="example-header-image"></div>
     <mat-card-title>{{ country.code }}</mat-card-title>
   </mat-card-header>
+  <mat-card-content>
+    <p>
+      Clicked: <strong>{{ counter || 0 }}</strong>
+    </p>
+  </mat-card-content>
   <mat-card-actions align="end">
     <button mat-button (click)="onSelect()">Select</button>
   </mat-card-actions>

@@ -11,6 +11,7 @@ import { CountryCode } from '../../models/countryCode.interface';
 })
 export class CountryDetailComponent {
   @Input({ required: true }) country!: CountryCode;
+  @Input({ required: true }) counter: number = 0;
 
   @Output() readonly countrySelected = new EventEmitter<CountryCode>();
 

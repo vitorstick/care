@@ -1,11 +1,12 @@
 <main>
   <section class="country-table">
-    @defer (when countries$) { @for (country of countries$ | async; track
-    country.id) {
+    @defer (when countryCounter$) { @for (country of countryCounter$ | async;
+    track country.countryCode.id) {
     <div class="country-card">
       <app-country-detail
-        [country]="country"
-        (countrySelected)="setSelectedCountry($event)"
+        [country]="country.countryCode"
+        [counter]="country.clickedCounter"
+        (countrySelected)="updateCounter($event)"
       ></app-country-detail>
     </div>
     }}@loading {
@@ -15,6 +16,6 @@
     }
   </section>
   <section class="country-counter">
-    <app-country-counter [counter]="lastSelectedCountry" />
+    <app-country-counter [counter]="lastSelectedCountry$ | async" />
   </section>
 </main>
